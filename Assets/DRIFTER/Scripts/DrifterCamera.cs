@@ -6,7 +6,7 @@ public class DrifterCamera : MonoBehaviour {
 
     public float FOVKick;
 
-    public float smooth;
+    public float smooth = 5;
 
     public float minX = -60f,
         maxX = 60f;
@@ -51,7 +51,11 @@ public class DrifterCamera : MonoBehaviour {
 	}
 
     private void FixedUpdate(){
-        transform.localEulerAngles = new Vector3(0, rotX, 0);
-        CameraPivot.transform.localEulerAngles = new Vector3(-rotY, 0, 0);
+        Quaternion targetX = Quaternion.Euler(0, rotX, 0);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetX, Time.deltaTime * smooth);
+
+
+        Quaternion targetY = Quaternion.Euler(new Vector3(-rotY, 0, 0));
+        CameraPivot.transform.localRotation = Quaternion.Slerp(CameraPivot.transform.localRotation, targetY, Time.deltaTime * smooth);
     }
 }
